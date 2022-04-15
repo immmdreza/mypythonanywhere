@@ -1,6 +1,8 @@
 import requests
 import typing
 
+from .types.request_method import RequestMethod
+
 from .types.account_type import AccountType
 from .types.base_request import BaseRequest
 
@@ -24,39 +26,47 @@ class PythonAnywhereClient:
             host=self._host_addr, username=username
         )
 
+    def __call__(self, request: BaseRequest[T]) -> T:
+        return self._send(request)
+
     def _get_host_addr(self):
         match (self._account_type):
             case AccountType.UsBased: return 'www.pythonanywhere.com'
             case AccountType.EuBased: return 'eu.pythonanywhere.com'
             case _: raise ValueError('Unknown account type')
 
-    def _send_request(self, endpoint: str, method: str, data: dict):
-        url = '{base_url}{endpoint}'.format(
+    def _send_request(
+            self, endpoint: str, method: RequestMethod, params: dict, data: dict):
+
+        url = '{base_url}{endpoint}/'.format(
             base_url=self._base_url, endpoint=endpoint
         )
         headers = {
             'Authorization': 'Token {token}'.format(token=self._token)
         }
-        request = requests.Request(method, url, headers=headers, data=data)
-        prepared = request.prepare()
-        with requests.session() as session:
-            return session.send(prepared)
 
-    def send(self, request: BaseRequest[T]) -> T:
+        match (method):
+            case RequestMethod.GET: return requests.get(
+                url, headers=headers, params=params)
+            case RequestMethod.POST: return requests.post(
+                url, headers=headers, data=data, params=params)
+            case RequestMethod.DELETE: return requests.delete(
+                url, headers=headers, params=params, data=data)
+            case RequestMethod.PATCH: return requests.patch(
+                url, headers=headers, params=params)
+            case _: raise ValueError('Unknown request method')
+
+    def _send(self, request: BaseRequest[T]) -> T:
         """
         Send a request to the API.
         """
         response = self._send_request(
             request.method,
-            request.request_method.value,
-            request.get_input_parameters())
+            request.request_method,
+            request.params,
+            request.data)
 
-        if response.status_code != 200:
-            raise ValueError(
-                'Request failed with status code {status_code}'.format(
-                    status_code=response.status_code
-                )
-            )
+        response.raise_for_status()
 
-        json_result = response.json()
+        json_result = response.json() if response.text else {}
         return request.get_return_value(json_result)

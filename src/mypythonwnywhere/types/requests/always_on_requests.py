@@ -9,7 +9,10 @@ class GetAlwaysOns(BaseRequest[list]):
     def get_return_value(self, data) -> list:
         return data
 
-    def get_input_parameters(self):
+    def _get_input_parameters(self):
+        return {}
+
+    def _get_input_data(self):
         return {}
 
 
@@ -23,9 +26,12 @@ class CreateAlwayOn(BaseRequest[None]):
     def get_return_value(self, data) -> None:
         return None
 
-    def get_input_parameters(self):
+    def _get_input_parameters(self):
         return {
             'command': self._command,
             'description': self._description,
             'enabled': self._enabled
         }
+
+    def _get_input_data(self):
+        return {}

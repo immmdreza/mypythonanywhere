@@ -25,5 +25,19 @@ class BaseRequest(abc.ABC, typing.Generic[T]):
         ...
 
     @abc.abstractmethod
-    def get_input_parameters(self) -> typing.Dict[str, typing.Any]:
+    def _get_input_parameters(self) -> typing.Dict[str, typing.Any]:
         ...
+
+    @abc.abstractmethod
+    def _get_input_data(self) -> typing.Dict[str, typing.Any]:
+        ...
+
+    @property
+    def params(self):
+        params = self._get_input_parameters()
+        return {k: v for k, v in params.items() if v is not None}
+
+    @property
+    def data(self):
+        data = self._get_input_data()
+        return {k: v for k, v in data.items() if v is not None}
