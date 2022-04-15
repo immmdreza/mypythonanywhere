@@ -4,6 +4,10 @@ from ..models.console import Console
 
 
 class GetConsoles(BaseRequest[list[Console]]):
+    """
+    List all your consoles
+    """
+
     def __init__(self):
         super().__init__('consoles', RequestMethod.GET)
 
@@ -18,6 +22,11 @@ class GetConsoles(BaseRequest[list[Console]]):
 
 
 class CreateConsole(BaseRequest[Console]):
+    """
+    Create a new console object (NB does not actually start the process.
+    Only connecting to the console in a browser will do that).
+    """
+
     def __init__(
             self,
             executable: str,
@@ -44,6 +53,8 @@ class CreateConsole(BaseRequest[Console]):
 
 
 class GetSharedConsoles(BaseRequest[list[Console]]):
+    """View consoles shared with you."""
+
     def __init__(self):
         super().__init__('consoles/shared_with_you', RequestMethod.GET)
 
@@ -58,6 +69,8 @@ class GetSharedConsoles(BaseRequest[list[Console]]):
 
 
 class GetConsoleInfo(BaseRequest[Console]):
+    """Return information about a console instance."""
+
     def __init__(self, console_id: int) -> None:
         super().__init__('consoles/{console_id}'.format(console_id=console_id),
                          RequestMethod.GET)
@@ -73,6 +86,8 @@ class GetConsoleInfo(BaseRequest[Console]):
 
 
 class KillConsole(BaseRequest[None]):
+    """Kill a console."""
+
     def __init__(self, console_id: int) -> None:
         super().__init__('consoles/{console_id}'.format(console_id=console_id),
                          RequestMethod.DELETE)
@@ -88,6 +103,10 @@ class KillConsole(BaseRequest[None]):
 
 
 class GetConsoleOutput(BaseRequest[str]):
+    """
+    Get the most recent output from the console (approximately 500 characters).
+    """
+
     def __init__(self, console_id: int) -> None:
         super().__init__('consoles/{console_id}/get_latest_output'.format(
             console_id=console_id), RequestMethod.GET)
@@ -103,6 +122,10 @@ class GetConsoleOutput(BaseRequest[str]):
 
 
 class SendConsoleInput(BaseRequest[None]):
+    """
+    "type" into the console. Add a `new-line` for return.
+    """
+
     def __init__(self, console_id: int, input_text: str) -> None:
         super().__init__('consoles/{console_id}/send_input'.format(
             console_id=console_id), RequestMethod.POST)

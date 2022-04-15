@@ -27,6 +27,10 @@ class PythonAnywhereClient:
         )
 
     def __call__(self, request: BaseRequest[T]) -> T:
+        """
+        Send a request to the API.
+        """
+
         return self._send(request)
 
     def _get_host_addr(self):
