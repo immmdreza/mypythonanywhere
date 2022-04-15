@@ -4,3 +4,5 @@ __pycache__/
 dist/
 build/
 mypythonanywhere.egg-info/
+.venv/
+dummy_test.py
