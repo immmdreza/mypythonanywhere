@@ -3,7 +3,15 @@ from ..request_method import RequestMethod
 
 
 class GetAlwaysOns(BaseRequest[list]):
+    """ List all your consoles
+
+    Args:
+        `BaseRequest (list)`: The list of always ons.
+    """
+
     def __init__(self):
+        """ List all your consoles
+        """
         super().__init__('always_on', RequestMethod.GET)
 
     def get_return_value(self, data) -> list:
@@ -17,7 +25,20 @@ class GetAlwaysOns(BaseRequest[list]):
 
 
 class CreateAlwayOn(BaseRequest[None]):
+    """ Create a new always on task.
+
+    Args:
+        `BaseRequest (None)`: Returns None.
+    """
+
     def __init__(self, command: str, description: str, enabled: bool):
+        """ Create a new always on task.
+
+        Args:
+            `command (str)`: The command to run.
+            `description (str)`: A description of the command.
+            `enabled (bool)`: Whether the command is enabled.
+        """
         super().__init__('always_on', RequestMethod.POST)
         self._command = command
         self._description = description

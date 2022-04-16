@@ -1,16 +1,17 @@
-import requests
 import typing
 
-from .types.request_method import RequestMethod
+import requests
 
+from .clients import (PythonAnywhereAlwaysOnClient,
+                      PythonAnywhereConsoleClient, PythonAnywhereCpuClient)
 from .types.account_type import AccountType
 from .types.base_request import BaseRequest
-
+from .types.request_method import RequestMethod
 
 T = typing.TypeVar('T')
 
 
-class PythonAnywhereClient:
+class PythonAnywhereClient(object):
     """
     A pythonanywhere client to communicate with the API.
     """
@@ -26,9 +27,18 @@ class PythonAnywhereClient:
             host=self._host_addr, username=username
         )
 
+        self.cpu = PythonAnywhereCpuClient(self)
+        self.consoles = PythonAnywhereConsoleClient(self)
+        self.always_ons = PythonAnywhereAlwaysOnClient(self)
+
     def __call__(self, request: BaseRequest[T]) -> T:
-        """
-        Send a request to the API.
+        """Sends a API request
+
+        Args:
+            request (`BaseRequest[T]`): A request to made.
+
+        Returns:
+            `T`: Return value of the request.
         """
 
         return self._send(request)
