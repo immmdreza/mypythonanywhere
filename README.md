@@ -46,4 +46,15 @@ Get all of your consoles.
 # [Console(id=24036640, user='MerrilleChoate', executable='python2.7', arguments='', working_directory=None, name='Python2.7 console 24036640', console_url='/user/MerrilleChoate/consoles/24036640/', console_frame_url='/user/MerrilleChoate/consoles/24036640/frame/')]
 ```
 
+### Direct Call
+
+``` py
+from mypythonanywhere.types.requests.console_requests import GetConsoleInfo
+
+# --- sniff ---
+
+console = client(GetConsoleInfo(123456789)) # Console
+```
+
+🍟 _Not all methods are implemented yet!_
 ...
