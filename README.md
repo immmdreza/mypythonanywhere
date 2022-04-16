@@ -19,7 +19,7 @@ The beta package is available at [PyPi](https://pypi.org/project/mypythonanywher
 ### Create Client
 
 ``` py
-from mypythonwnywhere import PythonAnywhereClient, AccountType
+from mypythonanywhere import PythonAnywhereClient, AccountType
 
 client = PythonAnywhereClient(
     username='MerrilleChoate',

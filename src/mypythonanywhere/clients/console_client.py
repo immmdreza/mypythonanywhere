@@ -6,7 +6,7 @@ from ..types.requests.console_requests import (CreateConsole, GetConsoleInfo,
                                                SendConsoleInput)
 
 if TYPE_CHECKING:
-    from mypythonwnywhere import PythonAnywhereClient
+    from mypythonanywhere import PythonAnywhereClient
 
 
 class PythonAnywhereConsoleClient:
