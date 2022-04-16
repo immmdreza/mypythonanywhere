@@ -1,8 +1,9 @@
 from ..base_request import BaseRequest
 from ..request_method import RequestMethod
+from ..custom_type_alias import JsonObject, JsonValue
 
 
-class GetAlwaysOns(BaseRequest[list]):
+class GetAlwaysOns(BaseRequest[JsonValue]):
     """ List all your consoles
 
     Args:
@@ -14,13 +15,13 @@ class GetAlwaysOns(BaseRequest[list]):
         """
         super().__init__('always_on', RequestMethod.GET)
 
-    def get_return_value(self, data) -> list:
+    def get_return_value(self, data: JsonValue):
         return data
 
-    def _get_input_parameters(self):
+    def _get_input_parameters(self) -> JsonObject:
         return {}
 
-    def _get_input_data(self):
+    def _get_input_data(self) -> JsonObject:
         return {}
 
 
@@ -44,7 +45,7 @@ class CreateAlwayOn(BaseRequest[None]):
         self._description = description
         self._enabled = enabled
 
-    def get_return_value(self, data) -> None:
+    def get_return_value(self, data: JsonValue):
         return None
 
     def _get_input_parameters(self):
@@ -54,5 +55,5 @@ class CreateAlwayOn(BaseRequest[None]):
             'enabled': self._enabled
         }
 
-    def _get_input_data(self):
+    def _get_input_data(self) -> JsonObject:
         return {}

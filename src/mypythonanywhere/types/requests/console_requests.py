@@ -1,6 +1,9 @@
+from typing import Optional
+
 from ..base_request import BaseRequest
-from ..request_method import RequestMethod
+from ..custom_type_alias import JsonObject, JsonValue
 from ..models.console import Console
+from ..request_method import RequestMethod
 
 
 class GetConsoles(BaseRequest[list[Console]]):
@@ -15,13 +18,15 @@ class GetConsoles(BaseRequest[list[Console]]):
         """
         super().__init__('consoles', RequestMethod.GET)
 
-    def get_return_value(self, data) -> list[Console]:
-        return [Console(**console) for console in data]
+    def get_return_value(self, data: JsonValue) -> list[Console]:
+        return [
+            Console(**console) for console in data if isinstance(console, dict)
+        ]
 
-    def _get_input_parameters(self):
+    def _get_input_parameters(self) -> JsonObject:
         return {}
 
-    def _get_input_data(self):
+    def _get_input_data(self) -> JsonObject:
         return {}
 
 
@@ -37,8 +42,8 @@ class CreateConsole(BaseRequest[Console]):
     def __init__(
             self,
             executable: str,
-            arguments: list[str] = None,
-            working_directory: str = None) -> None:
+            arguments: Optional[list[str]] = None,
+            working_directory: Optional[str] = None) -> None:
         """ Create a new console object (NB does not actually start the process.
         Only connecting to the console in a browser will do that).
 
@@ -53,8 +58,11 @@ class CreateConsole(BaseRequest[Console]):
             arguments, list) else None
         self._working_directory = working_directory
 
-    def get_return_value(self, data) -> Console:
-        return Console(**data)
+    def get_return_value(self, data: JsonValue) -> Console:
+        if isinstance(data, dict):
+            return Console(**data)
+        raise ValueError(
+            'Expected a dict, got {} instead.'.format(type(data)))
 
     def _get_input_parameters(self):
         return {
@@ -63,7 +71,7 @@ class CreateConsole(BaseRequest[Console]):
             'working_directory': self._working_directory
         }
 
-    def _get_input_data(self):
+    def _get_input_data(self) -> JsonObject:
         return {}
 
 
@@ -79,13 +87,15 @@ class GetSharedConsoles(BaseRequest[list[Console]]):
         """
         super().__init__('consoles/shared_with_you', RequestMethod.GET)
 
-    def get_return_value(self, data) -> list[Console]:
-        return [Console(**console) for console in data]
+    def get_return_value(self, data: JsonValue) -> list[Console]:
+        return [
+            Console(**console) for console in data if isinstance(console, dict)
+        ]
 
-    def _get_input_parameters(self):
+    def _get_input_parameters(self) -> JsonObject:
         return {}
 
-    def _get_input_data(self):
+    def _get_input_data(self) -> JsonObject:
         return {}
 
 
@@ -105,13 +115,16 @@ class GetConsoleInfo(BaseRequest[Console]):
         super().__init__('consoles/{console_id}'.format(console_id=console_id),
                          RequestMethod.GET)
 
-    def get_return_value(self, data) -> Console:
-        return Console(**data)
+    def get_return_value(self, data: JsonValue) -> Console:
+        if isinstance(data, dict):
+            return Console(**data)
+        raise ValueError(
+            'Expected a dict, got {} instead.'.format(type(data)))
 
-    def _get_input_parameters(self):
+    def _get_input_parameters(self) -> JsonObject:
         return {}
 
-    def _get_input_data(self):
+    def _get_input_data(self) -> JsonObject:
         return {}
 
 
@@ -131,13 +144,13 @@ class KillConsole(BaseRequest[None]):
         super().__init__('consoles/{console_id}'.format(console_id=console_id),
                          RequestMethod.DELETE)
 
-    def get_return_value(self, data):
+    def get_return_value(self, data: JsonValue) -> None:
         return None
 
-    def _get_input_parameters(self):
+    def _get_input_parameters(self) -> JsonObject:
         return {}
 
-    def _get_input_data(self):
+    def _get_input_data(self) -> JsonObject:
         return {}
 
 
@@ -157,13 +170,13 @@ class GetConsoleOutput(BaseRequest[str]):
         super().__init__('consoles/{console_id}/get_latest_output'.format(
             console_id=console_id), RequestMethod.GET)
 
-    def get_return_value(self, data):
-        return data["output"]
+    def get_return_value(self, data: JsonValue) -> str:
+        return data["output"]  # type: ignore
 
-    def _get_input_parameters(self):
+    def _get_input_parameters(self) -> JsonObject:
         return {}
 
-    def _get_input_data(self):
+    def _get_input_data(self) -> JsonObject:
         return {}
 
 
@@ -185,10 +198,10 @@ class SendConsoleInput(BaseRequest[None]):
             console_id=console_id), RequestMethod.POST)
         self._input_text = input_text
 
-    def get_return_value(self, data):
+    def get_return_value(self, data: JsonValue) -> None:
         return None
 
-    def _get_input_parameters(self):
+    def _get_input_parameters(self) -> JsonObject:
         return {}
 
     def _get_input_data(self):

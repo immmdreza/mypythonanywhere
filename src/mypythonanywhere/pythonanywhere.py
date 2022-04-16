@@ -7,8 +7,7 @@ from .clients import (PythonAnywhereAlwaysOnClient,
 from .types.account_type import AccountType
 from .types.base_request import BaseRequest
 from .types.request_method import RequestMethod
-
-T = typing.TypeVar('T')
+from .types.custom_type_alias import T
 
 
 class PythonAnywhereClient(object):
@@ -50,7 +49,11 @@ class PythonAnywhereClient(object):
             case _: raise ValueError('Unknown account type')
 
     def _send_request(
-            self, endpoint: str, method: RequestMethod, params: dict, data: dict):
+            self,
+            endpoint: str,
+            method: RequestMethod,
+            params: dict[str, typing.Any],
+            data: dict[str, typing.Any]):
 
         url = '{base_url}{endpoint}/'.format(
             base_url=self._base_url, endpoint=endpoint
@@ -82,5 +85,6 @@ class PythonAnywhereClient(object):
 
         response.raise_for_status()
 
-        json_result = response.json() if response.text else {}
+        json_result: dict[str, typing.Any] = response.json() \
+            if response.text else {}
         return request.get_return_value(json_result)
