@@ -2,12 +2,10 @@ import typing
 
 import requests
 
-from .clients import (PythonAnywhereAlwaysOnClient,
-                      PythonAnywhereConsoleClient, PythonAnywhereCpuClient)
 from .types.account_type import AccountType
 from .types.base_request import BaseRequest
-from .types.request_method import RequestMethod
 from .types.custom_type_alias import T
+from .types.request_method import RequestMethod
 
 
 class PythonAnywhereClient(object):
@@ -26,9 +24,15 @@ class PythonAnywhereClient(object):
             host=self._host_addr, username=username
         )
 
+        from .clients import (PythonAnywhereAlwaysOnClient,
+                              PythonAnywhereConsoleClient,
+                              PythonAnywhereCpuClient,
+                              PythonAnywhereDefaultPythonClient)
+
         self.cpu = PythonAnywhereCpuClient(self)
         self.consoles = PythonAnywhereConsoleClient(self)
         self.always_ons = PythonAnywhereAlwaysOnClient(self)
+        self.default_python = PythonAnywhereDefaultPythonClient(self)
 
     def __call__(self, request: BaseRequest[T]) -> T:
         """Sends a API request
@@ -70,7 +74,7 @@ class PythonAnywhereClient(object):
             case RequestMethod.DELETE: return requests.delete(
                 url, headers=headers, params=params, data=data)
             case RequestMethod.PATCH: return requests.patch(
-                url, headers=headers, params=params)
+                url, headers=headers, params=params, data=data)
             case _: raise ValueError('Unknown request method')
 
     def _send(self, request: BaseRequest[T]) -> T:
