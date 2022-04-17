@@ -8,6 +8,11 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+    
+env:
+  PYTHONANYWHERE_USERNAME: ${{ secrets.PYTHONANYWHERE_USERNAME }}
+  PYTHONANYWHERE_TOKEN: ${{ secrets.PYTHONANYWHERE_TOKEN }}
+  PYTHONANYWHERE_ACCOUNT_TYPE: ${{ secrets.PYTHONANYWHERE_ACCOUNT_TYPE }}
 
 permissions:
   contents: read
