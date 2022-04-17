@@ -3,7 +3,7 @@ from typing_extensions import TYPE_CHECKING
 from ..types.requests.always_on_requests import GetAlwaysOns, CreateAlwayOn
 
 if TYPE_CHECKING:
-    from mypythonanywhere import PythonAnywhereClient
+    from ..pythonanywhere import PythonAnywhereClient
 
 
 class PythonAnywhereAlwaysOnClient:

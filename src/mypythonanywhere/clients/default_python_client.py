@@ -6,7 +6,7 @@ from ..types.requests.default_python_requests import (
     SetDefaultPythonRequest, SetSaveAndRunDefaultPythonRequest)
 
 if TYPE_CHECKING:
-    from mypythonanywhere import PythonAnywhereClient
+    from ..pythonanywhere import PythonAnywhereClient
 
 
 class PythonAnywhereDefaultPythonClient:

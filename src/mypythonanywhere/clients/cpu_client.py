@@ -3,7 +3,7 @@ from typing_extensions import TYPE_CHECKING
 from ..types.requests.cpu_requests import GetCpuUsage
 
 if TYPE_CHECKING:
-    from mypythonanywhere import PythonAnywhereClient
+    from ..pythonanywhere import PythonAnywhereClient
 
 
 class PythonAnywhereCpuClient:

@@ -24,10 +24,10 @@ class PythonAnywhereClient(object):
             host=self._host_addr, username=username
         )
 
-        from .clients import (PythonAnywhereAlwaysOnClient,
-                              PythonAnywhereConsoleClient,
-                              PythonAnywhereCpuClient,
-                              PythonAnywhereDefaultPythonClient)
+        from .clients.always_on_client import PythonAnywhereAlwaysOnClient
+        from .clients.console_client import PythonAnywhereConsoleClient
+        from .clients.cpu_client import PythonAnywhereCpuClient
+        from .clients.default_python_client import PythonAnywhereDefaultPythonClient
 
         self.cpu = PythonAnywhereCpuClient(self)
         self.consoles = PythonAnywhereConsoleClient(self)
