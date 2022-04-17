@@ -19,9 +19,9 @@ The beta package is available at [PyPi](https://pypi.org/project/mypythonanywher
 ### Create Client
 
 ``` py
-from mypythonanywhere import PythonAnywhereClient, AccountType
+from mypythonanywhere import AccountType, FriendlyPythonAnywhereClient
 
-client = PythonAnywhereClient(
+client = FriendlyPythonAnywhereClient(
     username='MerrilleChoate',
     token='API_TOKEN',
     account_type=AccountType.UsBased
@@ -49,9 +49,12 @@ Get all of your consoles.
 ### Direct Call
 
 ``` py
+from mypythonanywhere.pythonanywhere import PythonAnywhereClient
 from mypythonanywhere.types.requests.console_requests import GetConsoleInfo
 
-# --- sniff ---
+client = PythonAnywhereClient(
+    # --- sniff ---
+)
 
 console = client(GetConsoleInfo(123456789)) # Console
 ```
