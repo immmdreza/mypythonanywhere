@@ -1,16 +1,12 @@
-from typing_extensions import TYPE_CHECKING
-
 from ..types.requests.default_python_requests import (
     GetDefaultPython3Request, GetDefaultPythonRequest,
     GetSaveAndRunDefaultPythonRequest, SetDefaultPython3Request,
     SetDefaultPythonRequest, SetSaveAndRunDefaultPythonRequest)
-
-if TYPE_CHECKING:
-    from ..pythonanywhere import PythonAnywhereClient
+from ..pythonanywhere import PythonAnywhereClient
 
 
 class PythonAnywhereDefaultPythonClient:
-    def __init__(self, raw_client: 'PythonAnywhereClient') -> None:
+    def __init__(self, raw_client: PythonAnywhereClient) -> None:
         self._raw_client = raw_client
 
     def get_default_python(self):

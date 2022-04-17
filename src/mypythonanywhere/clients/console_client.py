@@ -1,16 +1,12 @@
-from typing_extensions import TYPE_CHECKING
-
 from ..types.requests.console_requests import (CreateConsole, GetConsoleInfo,
                                                GetConsoleOutput, GetConsoles,
                                                GetSharedConsoles, KillConsole,
                                                SendConsoleInput)
-
-if TYPE_CHECKING:
-    from ..pythonanywhere import PythonAnywhereClient
+from ..pythonanywhere import PythonAnywhereClient
 
 
 class PythonAnywhereConsoleClient:
-    def __init__(self, raw_client: 'PythonAnywhereClient') -> None:
+    def __init__(self, raw_client: PythonAnywhereClient) -> None:
         self._raw_client = raw_client
 
     def get_consoles(self):

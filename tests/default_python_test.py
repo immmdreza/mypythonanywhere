@@ -1,7 +1,6 @@
 import unittest
 
-from src.mypythonanywhere.pythonanywhere import (AccountType,
-                                                 PythonAnywhereClient)
+from src.mypythonanywhere import AccountType, FriendlyPythonAnywhereClient
 
 from helpers import load_account_details_from_env
 
@@ -11,7 +10,7 @@ class DefaultPythonTest(unittest.TestCase):
     def setUp(self) -> None:
         (username, token, account_type) = load_account_details_from_env()
 
-        self.client = PythonAnywhereClient(
+        self.client = FriendlyPythonAnywhereClient(
             username=username,
             token=token,
             account_type=AccountType(account_type)
