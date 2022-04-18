@@ -1,6 +1,6 @@
 from typing import Optional
 
-from ..base_request import BaseRequest
+from ..base_request import BaseRequest, BaseOrder
 from ..custom_type_alias import JsonObject, JsonValue
 from ..models.console import Console
 from ..request_method import RequestMethod
@@ -128,7 +128,7 @@ class GetConsoleInfo(BaseRequest[Console]):
         return {}
 
 
-class KillConsole(BaseRequest[None]):
+class KillConsole(BaseOrder):
     """ Return information about a console instance.
 
     Args:
@@ -143,9 +143,6 @@ class KillConsole(BaseRequest[None]):
         """
         super().__init__('consoles/{console_id}'.format(console_id=console_id),
                          RequestMethod.DELETE)
-
-    def get_return_value(self, data: JsonValue) -> None:
-        return None
 
     def _get_input_parameters(self) -> JsonObject:
         return {}
@@ -180,7 +177,7 @@ class GetConsoleOutput(BaseRequest[str]):
         return {}
 
 
-class SendConsoleInput(BaseRequest[None]):
+class SendConsoleInput(BaseOrder):
     """ "type" into the console. Add a `new-line` for return.
 
     Args:
@@ -197,9 +194,6 @@ class SendConsoleInput(BaseRequest[None]):
         super().__init__('consoles/{console_id}/send_input'.format(
             console_id=console_id), RequestMethod.POST)
         self._input_text = input_text
-
-    def get_return_value(self, data: JsonValue) -> None:
-        return None
 
     def _get_input_parameters(self) -> JsonObject:
         return {}

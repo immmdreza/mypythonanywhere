@@ -1,4 +1,4 @@
-from ..base_request import BaseRequest
+from ..base_request import BaseRequest, BaseOrder
 from ..request_method import RequestMethod
 from ..custom_type_alias import JsonObject, JsonValue
 
@@ -25,7 +25,7 @@ class GetAlwaysOns(BaseRequest[JsonValue]):
         return {}
 
 
-class CreateAlwayOn(BaseRequest[None]):
+class CreateAlwayOn(BaseOrder):
     """ Create a new always on task.
 
     Args:
@@ -44,9 +44,6 @@ class CreateAlwayOn(BaseRequest[None]):
         self._command = command
         self._description = description
         self._enabled = enabled
-
-    def get_return_value(self, data: JsonValue):
-        return None
 
     def _get_input_parameters(self):
         return {
