@@ -68,7 +68,7 @@ There're api methods that are not implemented. following the order of <https://h
 
 ### Implement Methods?
 
-Take a look at [requests dir](src\mypythonanywhere\types\requests) for examples of implementing api methods.
+Take a look at [requests dir](src/mypythonanywhere/types/requests) for examples of implementing api methods.
 
 All you need is to inherit from `BaseRequest[T]` ( where `T` is the method return type ). then filling the abstract methods, unless you face something new.
 
