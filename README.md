@@ -61,3 +61,17 @@ console = client(GetConsoleInfo(123456789)) # Console
 
 🍟 _Not all methods are implemented yet!_
 ...
+
+## Contribute
+
+There're api methods that are not implemented. following the order of <https://help.pythonanywhere.com/pages/API>, methods related to files and below are yet to implement.
+
+### Implement Methods?
+
+Take a look at [requests dir](src\mypythonanywhere\types\requests) for examples of implementing api methods.
+
+All you need is to inherit from `BaseRequest[T]` ( where `T` is the method return type ). then filling the abstract methods, unless you face something new.
+
+### Automated tests
+
+Tests are missing for most of methods.
