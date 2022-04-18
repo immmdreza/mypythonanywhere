@@ -84,3 +84,29 @@ class BaseRequest(abc.ABC, typing.Generic[T]):
             JsonObject: The input files of the request.
         """
         return self._get_input_file()
+
+
+class BaseOrder(BaseRequest[None]):
+    def __init__(self, method: str, request_method: RequestMethod) -> None:
+        super().__init__(method, request_method)
+
+    def get_return_value(self, data: JsonValue):
+        return None
+
+    @abc.abstractmethod
+    def _get_input_parameters(self) -> JsonObject:
+        """ Get the input parameters of the request.
+
+        Returns:
+            JsonObject: The input parameters of the request.
+        """
+        ...
+
+    @abc.abstractmethod
+    def _get_input_data(self) -> JsonObject:
+        """ Get the input data of the request.
+
+        Returns:
+            JsonObject: The input data of the request.
+        """
+        ...
