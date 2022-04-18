@@ -17,7 +17,63 @@ class FriendlyPythonAnywhereClient(PythonAnywhereClient):
     def __init__(self, username: str, token: str, account_type: AccountType):
         super().__init__(username, token, account_type)
 
-        self.always_on = PythonAnywhereAlwaysOnClient(self)
-        self.default_python = PythonAnywhereDefaultPythonClient(self)
-        self.console = PythonAnywhereConsoleClient(self)
-        self.cpu = PythonAnywhereCpuClient(self)
+        self._always_on: PythonAnywhereAlwaysOnClient | None = None
+        self._default_python: PythonAnywhereDefaultPythonClient | None = None
+        self._console: PythonAnywhereConsoleClient | None = None
+        self._cpu: PythonAnywhereCpuClient | None = None
+
+    @property
+    def always_on(self) -> PythonAnywhereAlwaysOnClient:
+        """ Get the always_on client.
+
+        This client contains methods related to the always on tasks.
+
+        Returns:
+            PythonAnywhereAlwaysOnClient: AlwaysOn client.
+        """
+        if self._always_on is None:
+            self._always_on = PythonAnywhereAlwaysOnClient(self)
+
+        return self._always_on
+
+    @property
+    def default_python(self) -> PythonAnywhereDefaultPythonClient:
+        """ Get the default_python client.
+
+        This client contains methods related to the default python.
+
+        Returns:
+            PythonAnywhereDefaultPythonClient: DefaultPython client.
+        """
+        if self._default_python is None:
+            self._default_python = PythonAnywhereDefaultPythonClient(self)
+
+        return self._default_python
+
+    @property
+    def console(self) -> PythonAnywhereConsoleClient:
+        """ Get the console client.
+
+        This client contains methods related to the consoles.
+
+        Returns:
+            PythonAnywhereConsoleClient: Console client.
+        """
+        if self._console is None:
+            self._console = PythonAnywhereConsoleClient(self)
+
+        return self._console
+
+    @property
+    def cpu(self) -> PythonAnywhereCpuClient:
+        """ Get the cpu client.
+
+        This client contains methods related to the cpu usage.
+
+        Returns:
+            PythonAnywhereCpuClient: Cpu client.
+        """
+        if self._cpu is None:
+            self._cpu = PythonAnywhereCpuClient(self)
+
+        return self._cpu

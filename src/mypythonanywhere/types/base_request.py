@@ -57,6 +57,9 @@ class BaseRequest(abc.ABC, typing.Generic[T]):
         """
         ...
 
+    def _get_input_file(self) -> JsonObject:
+        return {}
+
     @property
     def params(self):
         """ The input parameters of the request."""
@@ -72,3 +75,12 @@ class BaseRequest(abc.ABC, typing.Generic[T]):
         """
         data = self._get_input_data()
         return {k: v for k, v in data.items() if v is not None}
+
+    @property
+    def files(self):
+        """ The input files of the request.
+
+        Returns:
+            JsonObject: The input files of the request.
+        """
+        return self._get_input_file()

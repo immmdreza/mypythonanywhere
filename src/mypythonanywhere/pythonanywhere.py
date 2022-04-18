@@ -6,6 +6,7 @@ from .types.account_type import AccountType
 from .types.base_request import BaseRequest
 from .types.custom_type_alias import T
 from .types.request_method import RequestMethod
+from .types.custom_type_alias import JsonObject
 
 
 class PythonAnywhereClient(object):
@@ -46,8 +47,9 @@ class PythonAnywhereClient(object):
             self,
             endpoint: str,
             method: RequestMethod,
-            params: dict[str, typing.Any],
-            data: dict[str, typing.Any]):
+            params: JsonObject,
+            data: JsonObject,
+            files: JsonObject):
 
         url = '{base_url}{endpoint}/'.format(
             base_url=self._base_url, endpoint=endpoint
@@ -58,13 +60,13 @@ class PythonAnywhereClient(object):
 
         match (method):
             case RequestMethod.GET: return requests.get(
-                url, headers=headers, params=params)
+                url, headers=headers, params=params, data=data, files=files)
             case RequestMethod.POST: return requests.post(
-                url, headers=headers, data=data, params=params)
+                url, headers=headers, data=data, params=params, files=files)
             case RequestMethod.DELETE: return requests.delete(
-                url, headers=headers, params=params, data=data)
+                url, headers=headers, params=params, data=data, files=files)
             case RequestMethod.PATCH: return requests.patch(
-                url, headers=headers, params=params, data=data)
+                url, headers=headers, params=params, data=data, files=files)
             case _: raise ValueError('Unknown request method')
 
     def _send(self, request: BaseRequest[T]) -> T:
@@ -75,7 +77,11 @@ class PythonAnywhereClient(object):
             request.method,
             request.request_method,
             request.params,
-            request.data)
+            request.data,
+            request.files)
+
+        if response.status_code == requests.codes.ok:
+            return request.get_return_value(response.json())
 
         response.raise_for_status()
 
