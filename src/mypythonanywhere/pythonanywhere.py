@@ -138,10 +138,17 @@ class PythonAnywhereClient(object):
                     out_put = await PythonAnywhereClient._get_output(
                         request, response)
             case RequestMethod.POST:
-                async with session.post(
-                        url,
-                        params=request.params,
-                        json=request.data) as response:
+
+                kw_args = {
+                    'params': request.params,
+                }
+
+                if request.data:
+                    kw_args['json'] = request.data
+                elif request.files:
+                    kw_args['data'] = request.files
+
+                async with session.post(url, **kw_args) as response:
                     out_put = await PythonAnywhereClient._get_output(
                         request, response)
             case RequestMethod.DELETE:
