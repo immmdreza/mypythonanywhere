@@ -9,8 +9,6 @@ from src.mypythonanywhere.types.requests.file_requests import (DeleteFile,
 
 from helpers import load_account_details_from_env
 
-# import pathlib
-
 
 class FilesTest(unittest.IsolatedAsyncioTestCase):
 

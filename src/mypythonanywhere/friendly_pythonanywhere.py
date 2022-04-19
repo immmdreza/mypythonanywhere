@@ -4,6 +4,7 @@ from .clients.always_on_client import PythonAnywhereAlwaysOnClient
 from .clients.console_client import PythonAnywhereConsoleClient
 from .clients.cpu_client import PythonAnywhereCpuClient
 from .clients.default_python_client import PythonAnywhereDefaultPythonClient
+from .clients.file_client import PythonAnywhereFileClient
 from .pythonanywhere import AccountType, PythonAnywhereClient
 
 
@@ -24,6 +25,7 @@ class FriendlyPythonAnywhereClient(PythonAnywhereClient):
         self._default_python: PythonAnywhereDefaultPythonClient | None = None
         self._console: PythonAnywhereConsoleClient | None = None
         self._cpu: PythonAnywhereCpuClient | None = None
+        self._file: PythonAnywhereFileClient | None = None
 
     @property
     def always_on(self) -> PythonAnywhereAlwaysOnClient:
@@ -80,3 +82,17 @@ class FriendlyPythonAnywhereClient(PythonAnywhereClient):
             self._cpu = PythonAnywhereCpuClient(self)
 
         return self._cpu
+
+    @property
+    def file(self) -> PythonAnywhereFileClient:
+        """ Get the file client.
+
+        This client contains methods related to the files.
+
+        Returns:
+            PythonAnywhereFileClient: File client.
+        """
+        if self._file is None:
+            self._file = PythonAnywhereFileClient(self)
+
+        return self._file

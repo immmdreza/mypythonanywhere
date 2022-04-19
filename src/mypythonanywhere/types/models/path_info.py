@@ -1,5 +1,6 @@
 import dataclasses
 import enum
+
 from ..custom_type_alias import JsonObject
 
 
