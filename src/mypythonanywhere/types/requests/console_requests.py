@@ -1,7 +1,9 @@
 from typing import Optional
 
-from ..base_request import BaseRequest, BaseOrder
-from ..custom_type_alias import JsonObject, JsonValue
+import aiohttp
+
+from ..base_request import BaseOrder, BaseRequest
+from ..custom_type_alias import JsonObject
 from ..models.console import Console
 from ..request_method import RequestMethod
 
@@ -18,7 +20,10 @@ class GetConsoles(BaseRequest[list[Console]]):
         """
         super().__init__('consoles', RequestMethod.GET)
 
-    def get_return_value(self, data: JsonValue) -> list[Console]:
+    async def get_return_value(
+            self, http_response: aiohttp.ClientResponse) -> list[Console]:
+
+        data = await self.ensure_getting_json_response(http_response)
         return [
             Console(**console) for console in data if isinstance(console, dict)
         ]
@@ -58,7 +63,11 @@ class CreateConsole(BaseRequest[Console]):
             arguments, list) else None
         self._working_directory = working_directory
 
-    def get_return_value(self, data: JsonValue) -> Console:
+    async def get_return_value(
+            self, http_response: aiohttp.ClientResponse) -> Console:
+
+        data = await self.ensure_getting_json_response(http_response)
+
         if isinstance(data, dict):
             return Console(**data)
         raise ValueError(
@@ -87,7 +96,10 @@ class GetSharedConsoles(BaseRequest[list[Console]]):
         """
         super().__init__('consoles/shared_with_you', RequestMethod.GET)
 
-    def get_return_value(self, data: JsonValue) -> list[Console]:
+    async def get_return_value(
+            self, http_response: aiohttp.ClientResponse) -> list[Console]:
+
+        data = await self.ensure_getting_json_response(http_response)
         return [
             Console(**console) for console in data if isinstance(console, dict)
         ]
@@ -115,7 +127,10 @@ class GetConsoleInfo(BaseRequest[Console]):
         super().__init__('consoles/{console_id}'.format(console_id=console_id),
                          RequestMethod.GET)
 
-    def get_return_value(self, data: JsonValue) -> Console:
+    async def get_return_value(
+            self, http_response: aiohttp.ClientResponse) -> Console:
+
+        data = await self.ensure_getting_json_response(http_response)
         if isinstance(data, dict):
             return Console(**data)
         raise ValueError(
@@ -167,7 +182,10 @@ class GetConsoleOutput(BaseRequest[str]):
         super().__init__('consoles/{console_id}/get_latest_output'.format(
             console_id=console_id), RequestMethod.GET)
 
-    def get_return_value(self, data: JsonValue) -> str:
+    async def get_return_value(
+            self, http_response: aiohttp.ClientResponse) -> str:
+
+        data = await self.ensure_getting_json_response(http_response)
         return data["output"]  # type: ignore
 
     def _get_input_parameters(self) -> JsonObject:

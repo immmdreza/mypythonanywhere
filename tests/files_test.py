@@ -42,15 +42,11 @@ class FilesTest(unittest.IsolatedAsyncioTestCase):
                 self.assertIsNotNone(files)
 
     async def test_upload_file(self):
-
-        t = await self.client(UploadFile(
+        await self.client(UploadFile(
             Path(__file__).parent.resolve().joinpath('test_file_to_send.txt'),
             'home/MerrilleChoate/my_file.txt'))
 
-        self.assertIsNotNone(t)
-
     async def test_upload_and_delete_file(self):
-
         async with self.client:
             await self.client(UploadFile(
                 Path(__file__).parent.resolve().joinpath(

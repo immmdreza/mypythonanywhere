@@ -1,7 +1,8 @@
 import pathlib
+import aiohttp
 
 from ..base_request import BaseOrder, BaseRequest
-from ..custom_type_alias import JsonObject, JsonValue
+from ..custom_type_alias import JsonObject
 from ..models.path_info import PathInfo
 from ..request_method import RequestMethod
 
@@ -17,7 +18,10 @@ class GetPath(BaseRequest[dict[str, PathInfo]]):
         """
         super().__init__(f'files/path/{path}', RequestMethod.GET)
 
-    def get_return_value(self, data: JsonValue) -> dict[str, PathInfo]:
+    async def get_return_value(
+            self, http_response: aiohttp.ClientResponse) -> dict[str, PathInfo]:
+
+        data = await self.ensure_getting_json_response(http_response)
         if isinstance(data, dict):
             return {
                 key: PathInfo.from_result(value)
@@ -67,7 +71,10 @@ class GetTree(BaseRequest[list[str]]):
         super().__init__('files/tree', RequestMethod.GET)
         self._path = path
 
-    def get_return_value(self, data: JsonValue) -> list[str]:
+    async def get_return_value(
+            self, http_response: aiohttp.ClientResponse) -> list[str]:
+
+        data = await self.ensure_getting_json_response(http_response)
         if isinstance(data, list):
             return data  # type: ignore
         raise ValueError(f'Expected a list, got {type(data)}')

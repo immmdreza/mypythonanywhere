@@ -105,12 +105,7 @@ class PythonAnywhereClient(object):
     async def _get_output(
             request: BaseRequest[T],
             response: aiohttp.ClientResponse) -> T:
-        response.raise_for_status()
-
-        if response.content_type == 'application/json':
-            json_result = await response.json()
-            return request.get_return_value(json_result)
-        return None  # type: ignore
+        return await request.get_return_value(response)
 
     async def _send(
             self,
