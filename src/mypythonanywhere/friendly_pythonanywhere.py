@@ -1,8 +1,10 @@
-from .pythonanywhere import PythonAnywhereClient, AccountType
+import aiohttp
+
 from .clients.always_on_client import PythonAnywhereAlwaysOnClient
-from .clients.default_python_client import PythonAnywhereDefaultPythonClient
 from .clients.console_client import PythonAnywhereConsoleClient
 from .clients.cpu_client import PythonAnywhereCpuClient
+from .clients.default_python_client import PythonAnywhereDefaultPythonClient
+from .pythonanywhere import AccountType, PythonAnywhereClient
 
 
 class FriendlyPythonAnywhereClient(PythonAnywhereClient):
@@ -14,8 +16,9 @@ class FriendlyPythonAnywhereClient(PythonAnywhereClient):
         PythonAnywhereClient (_type_): PythonAnywhereClient.
     """
 
-    def __init__(self, username: str, token: str, account_type: AccountType):
-        super().__init__(username, token, account_type)
+    def __init__(
+            self, username: str, token: str, account_type: AccountType, with_session: aiohttp.ClientSession | None = None):
+        super().__init__(username, token, account_type, with_session)
 
         self._always_on: PythonAnywhereAlwaysOnClient | None = None
         self._default_python: PythonAnywhereDefaultPythonClient | None = None
