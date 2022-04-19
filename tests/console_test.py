@@ -1,8 +1,12 @@
+import logging
 import unittest
 
 from src.mypythonanywhere import AccountType, FriendlyPythonAnywhereClient
 
 from helpers import load_account_details_from_env
+
+logging.basicConfig(filename='test_logs/consoles_tests.log',
+                    encoding='utf-8', level=logging.INFO)
 
 
 class ConsoleTest(unittest.IsolatedAsyncioTestCase):

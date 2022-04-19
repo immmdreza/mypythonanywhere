@@ -7,3 +7,4 @@ mypythonanywhere.egg-info/
 .venv/
 dummy_test.py
 .env
+test_logs/

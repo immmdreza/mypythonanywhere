@@ -1,10 +1,15 @@
+import logging
 from typing import Any, Optional
+
 import aiohttp
 
 from .types.account_type import AccountType
 from .types.base_request import BaseRequest
 from .types.custom_type_alias import T
 from .types.request_method import RequestMethod
+
+
+logger = logging.getLogger("pythonanywhere")
 
 
 class PythonAnywhereClient(object):
@@ -43,11 +48,13 @@ class PythonAnywhereClient(object):
 
         if self._default_session is not None:
             session = self._default_session
+            logger.info("Using default session for __call__.")
 
         return await self._send(request, session)
 
     async def __aenter__(self):
         if self._default_session is None:
+            logger.info("Creating new session for __aenter__.")
             self._default_session = aiohttp.ClientSession()
         return self
 
@@ -55,6 +62,7 @@ class PythonAnywhereClient(object):
         if self._default_session is not None:
             await self._default_session.close()
             self._default_session = None
+            logger.info("Closed session for __aexit__.")
 
     def clone_with_session(self, session: aiohttp.ClientSession) -> 'PythonAnywhereClient':
         """Clones this client with a new session.
@@ -115,8 +123,10 @@ class PythonAnywhereClient(object):
         if session is None:
             session = aiohttp.ClientSession()
             one_time_session = True
+            logger.info("Creating new one time session for _send.")
 
         if 'Authorization' not in session.headers:
+            logger.info("Adding Authorization header to session.")
             session.headers['Authorization'] = \
                 'Token {token}'.format(token=self._token)
 
@@ -151,5 +161,6 @@ class PythonAnywhereClient(object):
             case _: raise ValueError('Unknown request method')
 
         if one_time_session:
+            logger.info("Closing one time session for _send.")
             await session.close()
         return out_put
