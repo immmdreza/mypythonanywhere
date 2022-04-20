@@ -170,6 +170,13 @@ class PythonAnywhereClient(object):
                         json=request.data) as response:
                     out_put = await PythonAnywhereClient._get_output(
                         request, response)
+            case RequestMethod.PUT:
+                async with session.put(
+                        url,
+                        params=request.params,
+                        json=request.data) as response:
+                    out_put = await PythonAnywhereClient._get_output(
+                        request, response)
             case _: raise ValueError('Unknown request method')
 
         if one_time_session:
