@@ -1,8 +1,13 @@
 import pathlib
+
 import aiohttp
 
+from ...exceptions.files_exceptions import PathNotFound
 from ..base_request import BaseOrder, BaseRequest
 from ..custom_type_alias import JsonObject
+from ..models.file_shared import (FileAlreadyShared, FileShared,
+                                  FileStartedSharing)
+from ..models.file_uploaded import FileCreated, FileUpdated, FileUploaded
 from ..models.path_info import PathInfo
 from ..request_method import RequestMethod
 
@@ -36,7 +41,7 @@ class GetPath(BaseRequest[dict[str, PathInfo]]):
         return {}
 
 
-class UploadFile(BaseOrder):
+class UploadFile(BaseRequest[FileUploaded]):
     """
     Upload a file to the server.
     """
@@ -48,6 +53,15 @@ class UploadFile(BaseOrder):
         super().__init__('files/path/{path}'.format(
             path=upload_path), RequestMethod.POST)
         self._file_path = file_path
+
+    async def get_return_value(self, http_response: aiohttp.ClientResponse):
+        if http_response.status == 201:
+            return FileCreated()
+        elif http_response.status == 200:
+            return FileUpdated()
+        elif http_response.status == 404:
+            raise PathNotFound()
+        raise ValueError(f'Expected 201 or 200, got {http_response.status}')
 
     def _get_input_data(self) -> JsonObject:
         return {}
@@ -105,7 +119,7 @@ class DeleteFile(BaseOrder):
         return {}
 
 
-class ShareFile(BaseOrder):
+class ShareFile(BaseRequest[FileShared]):
     """
     Start sharing a file.
     """
@@ -117,8 +131,69 @@ class ShareFile(BaseOrder):
         super().__init__('files/sharing', RequestMethod.POST)
         self._path = path
 
+    async def get_return_value(self, http_response: aiohttp.ClientResponse):
+        if http_response.status == 200:
+            return FileStartedSharing()
+        elif http_response.status == 201:
+            return FileAlreadyShared()
+        elif http_response.status == 404:
+            raise PathNotFound()
+        raise ValueError(f'Expected 201 or 200, got {http_response.status}')
+
     def _get_input_data(self) -> JsonObject:
         return {'path': self._path}
 
     def _get_input_parameters(self) -> JsonObject:
         return {}
+
+
+class CheckSharingStatus(BaseRequest[bool]):
+    """
+    Check the sharing status of a file.
+    """
+
+    def __init__(self, path: str) -> None:
+        """
+        :param path: The path to the file.
+        """
+        super().__init__('files/sharing', RequestMethod.GET)
+        self._path = path
+
+    async def get_return_value(
+            self, http_response: aiohttp.ClientResponse):
+
+        if http_response.status == 404:
+            return False
+        http_response.raise_for_status()
+        return True
+
+    def _get_input_data(self) -> JsonObject:
+        return {}
+
+    def _get_input_parameters(self) -> JsonObject:
+        return {'path': self._path}
+
+
+class StopSharing(BaseRequest[bool]):
+    """
+    Stop sharing a file.
+    """
+
+    def __init__(self, path: str) -> None:
+        """
+        :param path: The path to the file.
+        """
+        super().__init__('files/sharing', RequestMethod.DELETE)
+        self._path = path
+
+    async def get_return_value(self, http_response: aiohttp.ClientResponse):
+        if http_response.status == 204:
+            return True
+        http_response.raise_for_status()
+        return False
+
+    def _get_input_data(self) -> JsonObject:
+        return {}
+
+    def _get_input_parameters(self) -> JsonObject:
+        return {'path': self._path}

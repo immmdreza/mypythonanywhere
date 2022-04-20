@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Optional
+from typing import Optional
 
 import aiohttp
 
@@ -14,7 +14,7 @@ logger = logging.getLogger("pythonanywhere")
 
 class PythonAnywhereClient(object):
     """
-    A pythonanywhere client to communicate with the API.
+    A pythonanywhere client to communicate with the API 🍟.
     """
 
     def __init__(
@@ -23,6 +23,15 @@ class PythonAnywhereClient(object):
             token: str,
             account_type: AccountType,
             with_session: aiohttp.ClientSession | None = None):
+        """ A pythonanywhere client to communicate with the API 🍟.
+
+        Args:
+            username (`str`): The username of the account.
+            token (`str`): The token of the account.
+            account_type (`AccountType`): The type of the account.
+            with_session (`aiohttp.ClientSession` | `None`, optional): 
+                The session to use. If `None` a new session will be created.
+        """
 
         self._username = username
         self._token = token
@@ -58,13 +67,14 @@ class PythonAnywhereClient(object):
             self._default_session = aiohttp.ClientSession()
         return self
 
-    async def __aexit__(self, exc_type: Any, exc_val: Any, exc_tb: Any):
+    async def __aexit__(self, _,  __, ___):  # type: ignore
         if self._default_session is not None:
             await self._default_session.close()
             self._default_session = None
             logger.info("Closed session for __aexit__.")
 
-    def clone_with_session(self, session: aiohttp.ClientSession) -> 'PythonAnywhereClient':
+    def clone_with_session(
+            self, session: aiohttp.ClientSession) -> 'PythonAnywhereClient':
         """Clones this client with a new session.
 
         Args:
