@@ -1,10 +1,10 @@
 import aiohttp
 
-from .clients.always_on_client import PythonAnywhereAlwaysOnClient
-from .clients.console_client import PythonAnywhereConsoleClient
-from .clients.cpu_client import PythonAnywhereCpuClient
-from .clients.default_python_client import PythonAnywhereDefaultPythonClient
-from .clients.file_client import PythonAnywhereFileClient
+from .clients.always_on import PythonAnywhereAlwaysOnClient
+from .clients.console import PythonAnywhereConsoleClient
+from .clients.cpu import PythonAnywhereCpuClient
+from .clients.default_python import PythonAnywhereDefaultPythonClient
+from .clients.file import PythonAnywhereFileClient
 from .pythonanywhere import AccountType, PythonAnywhereClient
 
 
