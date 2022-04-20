@@ -146,36 +146,13 @@ class PatchScheduledTask(BaseRequest[ScheduledTask]):
     Update a scheduled task.
     """
 
-    def __init__(
-            self,
-            task_id: int,
-            *,
-            command: Optional[str] = None,
-            enabled: Optional[bool] = None,
-            interval: Optional[IntervalType] = None,
-            hour: Optional[int] = None,
-            minute: Optional[int] = None,
-            description: Optional[str] = None):
+    def __init__(self, scheduled_task: ScheduledTask):
         """ Update a scheduled task.
-
-        Args:
-            task_id (`int`): The ID of the scheduled task.
-            command (`Optional[str]`, optional): Defaults to None.
-            enabled (`Optional[bool]`, optional): Defaults to None.
-            interval (`Optional[IntervalType]`, optional): Defaults to None.
-            hour (`Optional[int]`, optional): Defaults to None.
-            minute (`Optional[int]`, optional): Defaults to None.
-            description (`Optional[str]`, optional): Defaults to None.
         """
 
         super().__init__(
-            'schedule/{}'.format(task_id), RequestMethod.PATCH)
-        self.command = command
-        self.enabled = enabled
-        self.interval = interval
-        self.hour = hour
-        self.minute = minute
-        self.description = description
+            'schedule/{}'.format(scheduled_task.id), RequestMethod.PATCH)
+        self._schedule_task = scheduled_task
 
     async def get_return_value(
             self, http_response: aiohttp.ClientResponse):
@@ -190,14 +167,7 @@ class PatchScheduledTask(BaseRequest[ScheduledTask]):
         return {}
 
     def _get_input_data(self) -> JsonObject:
-        return {
-            'command': self.command,
-            'enabled': self.enabled,
-            'interval': self.interval,
-            'hour': self.hour,
-            'minute': self.minute,
-            'description': self.description
-        }
+        return self._schedule_task.to_json()
 
 
 class PutScheduledTask(BaseRequest[ScheduledTask]):
@@ -205,36 +175,13 @@ class PutScheduledTask(BaseRequest[ScheduledTask]):
     Update a scheduled task.
     """
 
-    def __init__(
-            self,
-            task_id: int,
-            *,
-            command: Optional[str] = None,
-            enabled: Optional[bool] = None,
-            interval: Optional[IntervalType] = None,
-            hour: Optional[int] = None,
-            minute: Optional[int] = None,
-            description: Optional[str] = None):
+    def __init__(self, scheduled_task: ScheduledTask):
         """ Update a scheduled task.
-
-        Args:
-            task_id (`int`): The ID of the scheduled task.
-            command (`str`): The command to run. For example `python3.9 /home/user/my_script.py`.
-            enabled (`bool`): Whether the task is enabled.
-            interval (`int`): The interval in seconds.
-            hour (`int`): The hour of the day. for daily tasks.
-            minute (`int`): The minute of the hour. for daily tasks.
-            description (`Optional[str]`, optional): Defaults to None.
         """
 
         super().__init__(
-            'schedule/{}'.format(task_id), RequestMethod.PUT)
-        self.command = command
-        self.enabled = int(enabled) if enabled is not None else None
-        self.interval = interval.value if interval is not None else None
-        self.hour = hour if hour is not None else None
-        self.minute = minute if minute is not None else None
-        self.description = description
+            'schedule/{}'.format(scheduled_task.id), RequestMethod.PUT)
+        self._schedule_task = scheduled_task
 
     async def get_return_value(
             self, http_response: aiohttp.ClientResponse):
@@ -249,11 +196,4 @@ class PutScheduledTask(BaseRequest[ScheduledTask]):
         return {}
 
     def _get_input_data(self) -> JsonObject:
-        return {
-            'command': self.command,
-            'enabled': self.enabled,
-            'interval': self.interval,
-            'hour': self.hour,
-            'minute': self.minute,
-            'description': self.description
-        }
+        return self._schedule_task.to_json()

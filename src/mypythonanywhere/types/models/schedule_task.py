@@ -1,7 +1,9 @@
 import dataclasses
 
+from mypythonanywhere.types.custom_type_alias import JsonObject
 
-@dataclasses.dataclass(frozen=True, init=True, kw_only=True)
+
+@dataclasses.dataclass(init=True, kw_only=True)
 class ScheduledTask:
     """ A scheduled task. """
 
@@ -33,3 +35,22 @@ class ScheduledTask:
     """ Whether the task can be enabled. """
     description: str
     """ The description of the scheduled task. """
+
+    def to_json(self) -> JsonObject:
+        """ Convert the scheduled task to a JSON object. """
+        return {
+            'id': self.id,
+            'url': self.url,
+            'user': self.user,
+            'command': self.command,
+            'expiry': self.expiry,
+            'enabled': self.enabled,
+            'logfile': self.logfile,
+            'extend_url': self.extend_url,
+            'interval': self.interval,
+            'hour': self.hour,
+            'minute': self.minute,
+            'printable_time': self.printable_time,
+            'can_enable': self.can_enable,
+            'description': self.description
+        }

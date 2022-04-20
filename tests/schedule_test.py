@@ -46,11 +46,9 @@ class ScheduleTest(unittest.IsolatedAsyncioTestCase):
         task = await self.client(GetScheduledTasks())
 
         task = task[0]
+        task.enabled = False
 
-        task = await self.client(PutScheduledTask(
-            task_id=task.id,
-            enabled=False
-        ))
+        task = await self.client(PutScheduledTask(task))
 
         self.assertTrue(isinstance(task, dict))
 
