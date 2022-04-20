@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from ..pythonanywhere import PythonAnywhereClient
-from ..types.requests.file_requests import (CheckSharingStatus, DeleteFile,
+from ..types.requests.file import (CheckSharingStatus, DeleteFile,
                                             GetPath, GetTree, ShareFile,
                                             StopSharing, UploadFile)
 

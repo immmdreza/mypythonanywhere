@@ -2,7 +2,7 @@ import unittest
 from pathlib import Path
 
 from src.mypythonanywhere import AccountType, FriendlyPythonAnywhereClient
-from src.mypythonanywhere.types.requests.file_requests import (DeleteFile,
+from mypythonanywhere.types.requests.file import (DeleteFile,
                                                                GetPath,
                                                                GetTree,
                                                                UploadFile)

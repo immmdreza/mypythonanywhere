@@ -1,4 +1,4 @@
-from ..types.requests.default_python_requests import (
+from ..types.requests.default_python import (
     GetDefaultPython3Request, GetDefaultPythonRequest,
     GetSaveAndRunDefaultPythonRequest, SetDefaultPython3Request,
     SetDefaultPythonRequest, SetSaveAndRunDefaultPythonRequest)

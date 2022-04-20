@@ -1,4 +1,4 @@
-from ..types.requests.cpu_requests import GetCpuUsage
+from ..types.requests.cpu import GetCpuUsage
 from ..pythonanywhere import PythonAnywhereClient
 
 
