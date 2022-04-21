@@ -1,7 +1,7 @@
 import dataclasses
 
 
-@dataclasses.dataclass(init=True, frozen=True)
+@dataclasses.dataclass(init=True)
 class PythonVersionInfo:
     """
     Python version information.

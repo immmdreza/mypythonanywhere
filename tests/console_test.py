@@ -29,7 +29,7 @@ class ConsoleTest(unittest.IsolatedAsyncioTestCase):
                 await self.client.console.kill_console(x.id)
 
             console = await self.client.console.create_console("python3.9", [], "")
-            await self.client.console.kill_console(console.id)
+            await console.kill()
 
             consoles = await self.client.console.get_consoles()
             self.assertFalse(any([x for x in consoles if x.id == console.id]))

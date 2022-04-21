@@ -1,7 +1,7 @@
 import dataclasses
 
 
-@dataclasses.dataclass(init=True, frozen=True, kw_only=True)
+@dataclasses.dataclass(init=True, kw_only=True)
 class CpuUsage:
     """
     Represents information about a CPU usage.

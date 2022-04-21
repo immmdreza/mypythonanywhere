@@ -7,6 +7,9 @@ from .clients.default_python import PythonAnywhereDefaultPythonClient
 from .clients.file import PythonAnywhereFileClient
 from .clients.schedule import PythonAnywhereScheduleClient
 from .pythonanywhere import AccountType, PythonAnywhereClient
+from .types.base_request import BaseRequest
+from .types.client_acceptable import ClientAcceptable
+from .types.custom_type_alias import T
 
 
 class FriendlyPythonAnywhereClient(PythonAnywhereClient):
@@ -28,6 +31,20 @@ class FriendlyPythonAnywhereClient(PythonAnywhereClient):
         self._cpu: PythonAnywhereCpuClient | None = None
         self._file: PythonAnywhereFileClient | None = None
         self._schedule: PythonAnywhereScheduleClient | None = None
+
+    # override PythonAnywhereClient _get_output to append the client attribute
+    # if the output is a ClientAcceptable.
+    # Direct method calls using PythonAnywhereClient do not have the client attribute
+    # even if the output is a ClientAcceptable.
+    async def _get_output(
+            self,
+            request: BaseRequest[T],
+            response: aiohttp.ClientResponse) -> T:
+        output = await request.get_return_value(response)
+
+        if issubclass(output.__class__, ClientAcceptable):
+            setattr(output, '_friendly_pythonanywhere_client', self)
+        return output
 
     @property
     def always_on(self) -> PythonAnywhereAlwaysOnClient:

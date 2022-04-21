@@ -13,7 +13,7 @@ class PathType(enum.Enum):
     SYMLINK = 'symlink'
 
 
-@dataclasses.dataclass(frozen=True, init=True, kw_only=True)
+@dataclasses.dataclass(init=True, kw_only=True)
 class PathInfo:
     """ Information about a path.
     """

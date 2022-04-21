@@ -1,8 +1,11 @@
 import dataclasses
 
+from ...types.client_targetable import ClientTargetable
+from ...types.client_acceptable import ClientAcceptable
 
-@dataclasses.dataclass(init=True, frozen=True, kw_only=True)
-class Console:
+
+@dataclasses.dataclass(init=True, kw_only=True)
+class Console(ClientTargetable, ClientAcceptable):
     """
     Represents information about a console instance.
     """
@@ -30,3 +33,9 @@ class Console:
 
     console_frame_url: str
     """ The url of the console frame. """
+
+    async def kill(self) -> None:
+        """
+        Kill the console.
+        """
+        await self.client.console.kill_console(self.id)

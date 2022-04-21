@@ -111,8 +111,8 @@ class PythonAnywhereClient(object):
             base_url=self._base_url, endpoint=endpoint
         )
 
-    @staticmethod
     async def _get_output(
+            self,
             request: BaseRequest[T],
             response: aiohttp.ClientResponse) -> T:
         return await request.get_return_value(response)
@@ -141,8 +141,7 @@ class PythonAnywhereClient(object):
                 case RequestMethod.GET:
                     async with session.get(
                             url, params=request.params) as response:
-                        out_put = await PythonAnywhereClient._get_output(
-                            request, response)
+                        out_put = await self._get_output(request, response)
                 case RequestMethod.POST:
 
                     kw_args = {
@@ -155,29 +154,25 @@ class PythonAnywhereClient(object):
                         kw_args['data'] = request.files
 
                     async with session.post(url, **kw_args) as response:
-                        out_put = await PythonAnywhereClient._get_output(
-                            request, response)
+                        out_put = await self._get_output(request, response)
                 case RequestMethod.DELETE:
                     async with session.delete(
                             url,
                             params=request.params,
                             json=request.data) as response:
-                        out_put = await PythonAnywhereClient._get_output(
-                            request, response)
+                        out_put = await self._get_output(request, response)
                 case RequestMethod.PATCH:
                     async with session.patch(
                             url,
                             params=request.params,
                             json=request.data) as response:
-                        out_put = await PythonAnywhereClient._get_output(
-                            request, response)
+                        out_put = await self._get_output(request, response)
                 case RequestMethod.PUT:
                     async with session.put(
                             url,
                             params=request.params,
                             json=request.data) as response:
-                        out_put = await PythonAnywhereClient._get_output(
-                            request, response)
+                        out_put = await self._get_output(request, response)
                 case _: raise ValueError('Unknown request method')
         except Exception as e:
             if one_time_session:
