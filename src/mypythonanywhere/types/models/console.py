@@ -38,3 +38,15 @@ class Console(MethodOutput):
         Kill the console.
         """
         await self.client.console.kill_console(self.id)
+
+    async def send_input(self, input: str) -> None:
+        """
+        Send input to the console.
+        """
+        await self.client.console.send_console_input(self.id, input)
+
+    async def get_output(self) -> str:
+        """
+        Get the output of the console.
+        """
+        return await self.client.console.get_console_output(self.id)
