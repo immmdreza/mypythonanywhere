@@ -1,11 +1,10 @@
 import dataclasses
 
-from ...types.client_targetable import ClientTargetable
-from ...types.client_acceptable import ClientAcceptable
+from ...types import MethodOutput
 
 
 @dataclasses.dataclass(init=True, kw_only=True)
-class Console(ClientTargetable, ClientAcceptable):
+class Console(MethodOutput):
     """
     Represents information about a console instance.
     """

@@ -1,14 +1,14 @@
 import aiohttp
 
-from .clients.always_on import PythonAnywhereAlwaysOnClient
-from .clients.console import PythonAnywhereConsoleClient
-from .clients.cpu import PythonAnywhereCpuClient
-from .clients.default_python import PythonAnywhereDefaultPythonClient
-from .clients.file import PythonAnywhereFileClient
-from .clients.schedule import PythonAnywhereScheduleClient
+from ._clients.always_on import PythonAnywhereAlwaysOnClient
+from ._clients.console import PythonAnywhereConsoleClient
+from ._clients.cpu import PythonAnywhereCpuClient
+from ._clients.default_python import PythonAnywhereDefaultPythonClient
+from ._clients.file import PythonAnywhereFileClient
+from ._clients.schedule import PythonAnywhereScheduleClient
 from .pythonanywhere import AccountType, PythonAnywhereClient
 from .types.base_request import BaseRequest
-from .types.client_acceptable import ClientAcceptable
+from .types._client_acceptable import ClientAcceptable
 from .types.custom_type_alias import T
 
 
