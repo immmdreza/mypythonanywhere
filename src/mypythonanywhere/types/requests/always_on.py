@@ -1,3 +1,6 @@
+import aiohttp
+
+
 from ..base_request import BaseRequest, BaseOrder
 from ..request_method import RequestMethod
 from ..custom_type_alias import JsonObject, JsonValue
@@ -15,7 +18,10 @@ class GetAlwaysOns(BaseRequest[JsonValue]):
         """
         super().__init__('always_on', RequestMethod.GET)
 
-    def get_return_value(self, data: JsonValue):
+    async def get_return_value(
+            self, http_response: aiohttp.ClientResponse):
+
+        data = await self.ensure_getting_json_response(http_response)
         return data
 
     def _get_input_parameters(self) -> JsonObject:

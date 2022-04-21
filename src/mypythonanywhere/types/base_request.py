@@ -1,6 +1,9 @@
 import abc
 import typing
 
+import aiohttp
+
+from ..exceptions.api_exception import ApiException
 from ..types.custom_type_alias import JsonObject, JsonValue, T
 from .request_method import RequestMethod
 
@@ -28,11 +31,11 @@ class BaseRequest(abc.ABC, typing.Generic[T]):
         return self._request_method
 
     @abc.abstractmethod
-    def get_return_value(self, data: JsonValue) -> T:
+    async def get_return_value(self, http_response: aiohttp.ClientResponse) -> T:
         """ Get the return value of the request.
 
         Args:
-            data (JsonValue): The data returned by the request.
+            http_response (`aiohttp.ClientResponse`): The response of the request.
 
         Returns:
             T: The return value of the request.
@@ -85,12 +88,34 @@ class BaseRequest(abc.ABC, typing.Generic[T]):
         """
         return self._get_input_file()
 
+    @classmethod
+    async def ensure_getting_json_response(
+            cls, response: aiohttp.ClientResponse) -> JsonValue:
+        """ Ensure that the response is a json response.
+
+        Args:
+            response (`aiohttp.ClientResponse`): The response of the request.
+
+        Raises:
+            ValueError: If the response is not a json response.
+        """
+        if response.content_type != 'application/json':
+
+            response.raise_for_status()
+        json = await response.json()
+
+        if not response.ok:
+            raise ApiException(
+                ', '.join(f"{k}: {v}" for k, v in json.items()))
+
+        return json
+
 
 class BaseOrder(BaseRequest[None]):
     def __init__(self, method: str, request_method: RequestMethod) -> None:
         super().__init__(method, request_method)
 
-    def get_return_value(self, data: JsonValue):
+    async def get_return_value(self, http_response: aiohttp.ClientResponse):
         return None
 
     @abc.abstractmethod

@@ -1,4 +1,4 @@
-from ..types.requests.console_requests import (CreateConsole, GetConsoleInfo,
+from ..types.requests.console import (CreateConsole, GetConsoleInfo,
                                                GetConsoleOutput, GetConsoles,
                                                GetSharedConsoles, KillConsole,
                                                SendConsoleInput)

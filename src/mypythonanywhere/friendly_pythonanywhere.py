@@ -1,9 +1,11 @@
 import aiohttp
 
-from .clients.always_on_client import PythonAnywhereAlwaysOnClient
-from .clients.console_client import PythonAnywhereConsoleClient
-from .clients.cpu_client import PythonAnywhereCpuClient
-from .clients.default_python_client import PythonAnywhereDefaultPythonClient
+from .clients.always_on import PythonAnywhereAlwaysOnClient
+from .clients.console import PythonAnywhereConsoleClient
+from .clients.cpu import PythonAnywhereCpuClient
+from .clients.default_python import PythonAnywhereDefaultPythonClient
+from .clients.file import PythonAnywhereFileClient
+from .clients.schedule import PythonAnywhereScheduleClient
 from .pythonanywhere import AccountType, PythonAnywhereClient
 
 
@@ -24,6 +26,8 @@ class FriendlyPythonAnywhereClient(PythonAnywhereClient):
         self._default_python: PythonAnywhereDefaultPythonClient | None = None
         self._console: PythonAnywhereConsoleClient | None = None
         self._cpu: PythonAnywhereCpuClient | None = None
+        self._file: PythonAnywhereFileClient | None = None
+        self._schedule: PythonAnywhereScheduleClient | None = None
 
     @property
     def always_on(self) -> PythonAnywhereAlwaysOnClient:
@@ -32,7 +36,7 @@ class FriendlyPythonAnywhereClient(PythonAnywhereClient):
         This client contains methods related to the always on tasks.
 
         Returns:
-            PythonAnywhereAlwaysOnClient: AlwaysOn client.
+            `PythonAnywhereAlwaysOnClient`: AlwaysOn client.
         """
         if self._always_on is None:
             self._always_on = PythonAnywhereAlwaysOnClient(self)
@@ -46,7 +50,7 @@ class FriendlyPythonAnywhereClient(PythonAnywhereClient):
         This client contains methods related to the default python.
 
         Returns:
-            PythonAnywhereDefaultPythonClient: DefaultPython client.
+            `PythonAnywhereDefaultPythonClient`: DefaultPython client.
         """
         if self._default_python is None:
             self._default_python = PythonAnywhereDefaultPythonClient(self)
@@ -60,7 +64,7 @@ class FriendlyPythonAnywhereClient(PythonAnywhereClient):
         This client contains methods related to the consoles.
 
         Returns:
-            PythonAnywhereConsoleClient: Console client.
+            `PythonAnywhereConsoleClient`: Console client.
         """
         if self._console is None:
             self._console = PythonAnywhereConsoleClient(self)
@@ -74,9 +78,37 @@ class FriendlyPythonAnywhereClient(PythonAnywhereClient):
         This client contains methods related to the cpu usage.
 
         Returns:
-            PythonAnywhereCpuClient: Cpu client.
+            `PythonAnywhereCpuClient`: Cpu client.
         """
         if self._cpu is None:
             self._cpu = PythonAnywhereCpuClient(self)
 
         return self._cpu
+
+    @property
+    def file(self) -> PythonAnywhereFileClient:
+        """ Get the file client.
+
+        This client contains methods related to the files.
+
+        Returns:
+            `PythonAnywhereFileClient`: File client.
+        """
+        if self._file is None:
+            self._file = PythonAnywhereFileClient(self)
+
+        return self._file
+
+    @property
+    def schedule(self) -> PythonAnywhereScheduleClient:
+        """ Get the schedule client.
+
+        This client contains methods related to the scheduled tasks.
+
+        Returns:
+            `PythonAnywhereScheduleClient`: Schedule client.
+        """
+        if self._schedule is None:
+            self._schedule = PythonAnywhereScheduleClient(self)
+
+        return self._schedule

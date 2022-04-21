@@ -1,5 +1,8 @@
+import aiohttp
+
+
 from ..base_request import BaseRequest
-from ..custom_type_alias import JsonObject, JsonValue
+from ..custom_type_alias import JsonObject
 from ..models.python_version import PythonVersionInfo
 from ..request_method import RequestMethod
 
@@ -16,7 +19,10 @@ class GetDefaultPython3Request(BaseRequest[PythonVersionInfo]):
         """
         super().__init__('default_python3_version', RequestMethod.GET)
 
-    def get_return_value(self, data: JsonValue):
+    async def get_return_value(
+            self, http_response: aiohttp.ClientResponse):
+
+        data = await self.ensure_getting_json_response(http_response)
         if isinstance(data, dict):
             return PythonVersionInfo(
                 data['default_python3_version'],
@@ -42,7 +48,10 @@ class SetDefaultPython3Request(BaseRequest[PythonVersionInfo]):
         super().__init__('default_python3_version', RequestMethod.PATCH)
         self._default_python3_version = default_python3_version
 
-    def get_return_value(self, data: JsonValue):
+    async def get_return_value(
+            self, http_response: aiohttp.ClientResponse):
+
+        data = await self.ensure_getting_json_response(http_response)
         if isinstance(data, dict):
             return PythonVersionInfo(
                 data['default_python3_version'],
@@ -68,7 +77,10 @@ class GetDefaultPythonRequest(BaseRequest[PythonVersionInfo]):
         """
         super().__init__('default_python_version', RequestMethod.GET)
 
-    def get_return_value(self, data: JsonValue):
+    async def get_return_value(
+            self, http_response: aiohttp.ClientResponse):
+
+        data = await self.ensure_getting_json_response(http_response)
         if isinstance(data, dict):
             return PythonVersionInfo(
                 data['default_python_version'],
@@ -94,7 +106,10 @@ class SetDefaultPythonRequest(BaseRequest[PythonVersionInfo]):
         super().__init__('default_python_version', RequestMethod.PATCH)
         self._default_python_version = default_python_version
 
-    def get_return_value(self, data: JsonValue):
+    async def get_return_value(
+            self, http_response: aiohttp.ClientResponse):
+
+        data = await self.ensure_getting_json_response(http_response)
         if isinstance(data, dict):
             return PythonVersionInfo(
                 data['default_python_version'],
@@ -122,7 +137,10 @@ class GetSaveAndRunDefaultPythonRequest(BaseRequest[PythonVersionInfo]):
         super().__init__('default_save_and_run_python_version',
                          RequestMethod.GET)
 
-    def get_return_value(self, data: JsonValue):
+    async def get_return_value(
+            self, http_response: aiohttp.ClientResponse):
+
+        data = await self.ensure_getting_json_response(http_response)
         if isinstance(data, dict):
             return PythonVersionInfo(
                 data['default_save_and_run_python_version'],
@@ -149,7 +167,10 @@ class SetSaveAndRunDefaultPythonRequest(BaseRequest[PythonVersionInfo]):
                          RequestMethod.PATCH)
         self._default_save_and_run_python_version = default_save_and_run_python_version
 
-    def get_return_value(self, data: JsonValue):
+    async def get_return_value(
+            self, http_response: aiohttp.ClientResponse):
+
+        data = await self.ensure_getting_json_response(http_response)
         if isinstance(data, dict):
             return PythonVersionInfo(
                 data['default_save_and_run_python_version'],

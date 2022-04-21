@@ -1,4 +1,4 @@
-from ..types.requests.always_on_requests import GetAlwaysOns, CreateAlwayOn
+from ..types.requests.always_on import GetAlwaysOns, CreateAlwayOn
 from ..pythonanywhere import PythonAnywhereClient
 
 
