@@ -3,6 +3,7 @@ import typing
 
 import aiohttp
 
+from ..exceptions.api_exception import ApiException
 from ..types.custom_type_alias import JsonObject, JsonValue, T
 from .request_method import RequestMethod
 
@@ -99,8 +100,15 @@ class BaseRequest(abc.ABC, typing.Generic[T]):
             ValueError: If the response is not a json response.
         """
         if response.content_type != 'application/json':
+
             response.raise_for_status()
-        return await response.json()
+        json = await response.json()
+
+        if not response.ok:
+            raise ApiException(
+                ', '.join(f"{k}: {v}" for k, v in json.items()))
+
+        return json
 
 
 class BaseOrder(BaseRequest[None]):

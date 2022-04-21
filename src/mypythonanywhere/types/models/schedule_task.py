@@ -1,6 +1,6 @@
 import dataclasses
 
-from mypythonanywhere.types.custom_type_alias import JsonObject
+from ..custom_type_alias import JsonObject
 
 
 @dataclasses.dataclass(init=True, kw_only=True)

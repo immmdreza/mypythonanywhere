@@ -29,7 +29,7 @@ class PythonAnywhereClient(object):
             username (`str`): The username of the account.
             token (`str`): The token of the account.
             account_type (`AccountType`): The type of the account.
-            with_session (`aiohttp.ClientSession` | `None`, optional): 
+            with_session (`aiohttp.ClientSession` | `None`, optional):
                 The session to use. If `None` a new session will be created.
         """
 
@@ -136,50 +136,56 @@ class PythonAnywhereClient(object):
                 'Token {token}'.format(token=self._token)
 
         out_put: T
-        match (request.request_method):
-            case RequestMethod.GET:
-                async with session.get(
-                        url, params=request.params) as response:
-                    out_put = await PythonAnywhereClient._get_output(
-                        request, response)
-            case RequestMethod.POST:
+        try:
+            match (request.request_method):
+                case RequestMethod.GET:
+                    async with session.get(
+                            url, params=request.params) as response:
+                        out_put = await PythonAnywhereClient._get_output(
+                            request, response)
+                case RequestMethod.POST:
 
-                kw_args = {
-                    'params': request.params,
-                }
+                    kw_args = {
+                        'params': request.params,
+                    }
 
-                if request.data:
-                    kw_args['json'] = request.data
-                elif request.files:
-                    kw_args['data'] = request.files
+                    if request.data:
+                        kw_args['json'] = request.data
+                    elif request.files:
+                        kw_args['data'] = request.files
 
-                async with session.post(url, **kw_args) as response:
-                    out_put = await PythonAnywhereClient._get_output(
-                        request, response)
-            case RequestMethod.DELETE:
-                async with session.delete(
-                        url,
-                        params=request.params,
-                        json=request.data) as response:
-                    out_put = await PythonAnywhereClient._get_output(
-                        request, response)
-            case RequestMethod.PATCH:
-                async with session.patch(
-                        url,
-                        params=request.params,
-                        json=request.data) as response:
-                    out_put = await PythonAnywhereClient._get_output(
-                        request, response)
-            case RequestMethod.PUT:
-                async with session.put(
-                        url,
-                        params=request.params,
-                        json=request.data) as response:
-                    out_put = await PythonAnywhereClient._get_output(
-                        request, response)
-            case _: raise ValueError('Unknown request method')
-
-        if one_time_session:
-            logger.info("Closing one time session for _send.")
-            await session.close()
-        return out_put
+                    async with session.post(url, **kw_args) as response:
+                        out_put = await PythonAnywhereClient._get_output(
+                            request, response)
+                case RequestMethod.DELETE:
+                    async with session.delete(
+                            url,
+                            params=request.params,
+                            json=request.data) as response:
+                        out_put = await PythonAnywhereClient._get_output(
+                            request, response)
+                case RequestMethod.PATCH:
+                    async with session.patch(
+                            url,
+                            params=request.params,
+                            json=request.data) as response:
+                        out_put = await PythonAnywhereClient._get_output(
+                            request, response)
+                case RequestMethod.PUT:
+                    async with session.put(
+                            url,
+                            params=request.params,
+                            json=request.data) as response:
+                        out_put = await PythonAnywhereClient._get_output(
+                            request, response)
+                case _: raise ValueError('Unknown request method')
+        except Exception as e:
+            if one_time_session:
+                logger.info("Closing one time session for _send due to error.")
+                await session.close()
+            raise e
+        else:
+            if one_time_session:
+                logger.info("Closing one time session for _send.")
+                await session.close()
+            return out_put

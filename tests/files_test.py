@@ -2,10 +2,10 @@ import unittest
 from pathlib import Path
 
 from src.mypythonanywhere import AccountType, FriendlyPythonAnywhereClient
-from mypythonanywhere.types.requests.file import (DeleteFile,
-                                                  GetPath,
-                                                  GetTree,
-                                                  UploadFile)
+from src.mypythonanywhere.types.requests.file import (DeleteFile,
+                                                      GetPath,
+                                                      GetTree,
+                                                      UploadFile)
 
 from helpers import load_account_details_from_env
 
